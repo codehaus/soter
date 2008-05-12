@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rbac xmlns="http://geronimo.apache.org/xml/ns/rbac-xml">
+    <user>
+        <user-name>fred</user-name>
+        <password>fred</password>
+    </user>
+    <scope>
+        <scope-name>global</scope-name>
+        <role>
+            <role-name>role1</role-name>
+        </role>
+        <scope>
+            <scope-name>app1</scope-name>
+            <role>
+                <role-name>role3</role-name>
+            </role>
+            <role>
+                <role-name>role4</role-name>
+            </role>
+        </scope>
+    </scope>
+    <user-role>
+        <user>fred</user>
+        <role role-name="role3" scope-name="app1"/>
+        <role role-name="role4" scope-name="app1"/>
+    </user-role>
+</rbac>

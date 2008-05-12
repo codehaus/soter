@@ -1,0 +1,109 @@
+<?xml version="1.0"?><project>
+  <parent>
+    <artifactId>rbac-xml-parent</artifactId>
+    <groupId>org.soter.rbac</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.soter.rbac</groupId>
+  <artifactId>rbac-xml-model</artifactId>
+  <name>rbac-xml-model</name>
+  <version>1.0-SNAPSHOT</version>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+      <dependency>
+          <groupId>javax.xml.bind</groupId>
+          <artifactId>jaxb-api</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>com.sun.xml.bind</groupId>
+          <artifactId>jaxb-impl</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-stax-api_1.0_spec</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>woodstox</groupId>
+          <artifactId>wstx-asl</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
+          <classifier>jdk15</classifier>
+      </dependency>
+      
+      <dependency>
+          <groupId>org.apache.geronimo.testsupport</groupId>
+          <artifactId>testsupport-common</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.apache.xbean</groupId>
+          <artifactId>xbean-reflect</artifactId>
+      </dependency>
+  </dependencies>
+
+<!--
+    <pluginRepositories>
+            <pluginRepository>
+                    <id>maven2-repository.dev.java.net</id>
+                    <url>http://download.java.net/maven/2</url>
+            </pluginRepository>
+            <pluginRepository>
+                    <id>maven-repository.dev.java.net</id>
+                    <name>Java.net Maven 1 Repository (legacy)</name>
+                    <url>http://download.java.net/maven/1</url>
+                    <layout>legacy</layout>
+            </pluginRepository>
+    </pluginRepositories>
+-->
+
+    <build>
+
+        <plugins>
+<!--
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <packageName>org.soter.rbac.model</packageName>
+                    <extension>true</extension>
+                </configuration>
+            </plugin>
+-->
+<!--         experiment with 2.1 episodes for multi-schema compilations.
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaDirectory>src/main/xsd</schemaDirectory>
+                    <packageName>org.soter.rbac.model</packageName>
+                    <extension>true</extension>
+                    <arguments>-episode rbac.episode</arguments>
+                </configuration>
+            </plugin>
+-->
+        </plugins>
+    </build>
+
+</project>

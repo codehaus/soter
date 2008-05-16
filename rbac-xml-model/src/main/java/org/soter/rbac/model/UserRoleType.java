@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
     "role"
 })
 public class UserRoleType
-    implements Serializable
+    implements Serializable, Keyable<String>
 {
     private final static long serialVersionUID = 12343L;
     @XmlElement(required = true)
@@ -63,6 +63,10 @@ public class UserRoleType
      */
     public String getUser() {
         return user;
+    }
+
+    public String getKey() {
+        return getUser();
     }
 
     /**

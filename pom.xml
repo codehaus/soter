@@ -1,17 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<parent>
-  <groupId>org.apache.geronimo.genesis.config</groupId>
-  <artifactId>project-config</artifactId>
-  <version>1.4</version>
-</parent>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.soter.rbac</groupId>
-  <artifactId>rbac-xml-parent</artifactId>
-  <packaging>pom</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>rbac-xml-parent</name>
-  <url>http://maven.apache.org</url>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.soter.rbac</groupId>
+    <artifactId>rbac-xml-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>rbac-xml-parent</name>
+
+    <packaging>pom</packaging>
+
+    <url>http://soter.codehaus.org</url>
+    <inceptionYear>2008</inceptionYear>
+
+    <scm>
+        <connection>scm:svn:http://svn.codehaus.org/soter/trunk</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/soter/trunk</developerConnection>
+        <url>http://svn.soter.codehaus.org/browse/soter/trunk</url>
+    </scm>
+
+    <modules>
+        <module>rbac-xml-model</module>
+        <module>rbac-jacc</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencyManagement>
         <dependencies>
 
@@ -85,8 +108,8 @@
 
         </dependencies>
     </dependencyManagement>
-    <repositories>
 
+    <repositories>
         <repository>
             <id>java.net</id>
             <url>http://download.java.net/maven/1/</url>
@@ -98,12 +121,16 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
-
     </repositories>
-  <dependencies>
-  </dependencies>
-  <modules>
-    <module>rbac-xml-model</module>
-    <module>rbac-jacc</module>
-  </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>forge-releases</id>
+            <url>http://repository.sonatype.org:8081/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>forge-snapshots</id>
+            <url>http://repository.sonatype.org:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

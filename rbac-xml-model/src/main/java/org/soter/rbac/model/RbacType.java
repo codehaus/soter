@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
+import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -53,10 +54,10 @@ public class RbacType implements Serializable
 {
 
     private final static long serialVersionUID = 12343L;
-    protected List<UserType> user;
-    protected List<ScopeType> scope;
+    private final KeyedCollection<String, UserType> user = new KeyedCollection<String, UserType>();
+    private final KeyedCollection<String, ScopeType> scope = new KeyedCollection<String, ScopeType>();
     @XmlElement(name = "user-role")
-    protected List<UserRoleType> userRole;
+    private final KeyedCollection<String, UserRoleType> userRole = new KeyedCollection<String, UserRoleType>();
 
     @XmlTransient
     private final Map<String, ScopeType> scopes = new HashMap<String, ScopeType>();
@@ -69,9 +70,9 @@ public class RbacType implements Serializable
     }
 
     public RbacType(RbacType original) {
-        user = original.user;
-        userRole = original.userRole;
-        scope = original.scope;
+        user.addAll(original.user);
+        userRole.addAll(original.userRole);
+        scope.addAll(original.scope);
         userPassword.putAll(original.userPassword);
         for (Map.Entry<String, ScopeType> scopeEntry: original.scopes.entrySet()) {
             scopes.put(scopeEntry.getKey(), new ScopeType(scopeEntry.getValue(), null));
@@ -116,10 +117,7 @@ public class RbacType implements Serializable
      * 
      * 
      */
-    public List<UserType> getUser() {
-        if (user == null) {
-            user = new ArrayList<UserType>();
-        }
+    public Collection<UserType> getUser() {
         return this.user;
     }
 
@@ -145,10 +143,7 @@ public class RbacType implements Serializable
      * 
      * 
      */
-    public List<ScopeType> getScope() {
-        if (scope == null) {
-            scope = new ArrayList<ScopeType>();
-        }
+    public Collection<ScopeType> getScope() {
         return this.scope;
     }
 
@@ -174,10 +169,7 @@ public class RbacType implements Serializable
      * 
      * 
      */
-    public List<UserRoleType> getUserRole() {
-        if (userRole == null) {
-            userRole = new ArrayList<UserRoleType>();
-        }
+    public Collection<UserRoleType> getUserRole() {
         return this.userRole;
     }
 
@@ -287,6 +279,32 @@ public class RbacType implements Serializable
                 throw new IllegalStateException("UserRole already registered: " + userRole);
             }
             userRoles.put(userRole.getUser(), toRoles(userRole.getRole()));
+        }
+    }
+
+    public void mergeData(RbacType bits) {
+        for (UserType user : bits.user) {
+            if (this.user.toMap().containsKey(user.getUserName())) {
+                throw new IllegalArgumentException("User " + user.getUserName() + " is already defined");
+            }
+            this.user.add(user);
+        }
+
+        for (ScopeType scope : bits.scope) {
+            ScopeType existingScope = this.scope.toMap().get(scope.getScopeName());
+            if (existingScope != null) {
+                // todo verify
+                existingScope.mergeData(scope);
+            } else {
+                this.scope.add(scope);
+            }
+        }
+
+        for (UserRoleType userRole: bits.userRole) {
+            if (this.userRole.toMap().containsKey(userRole.getUser())) {
+                throw new IllegalStateException("UserRole already registered: " + userRole);
+            }
+            this.userRole.add(userRole);
         }
     }
 

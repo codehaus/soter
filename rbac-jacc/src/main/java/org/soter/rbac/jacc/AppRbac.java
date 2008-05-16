@@ -20,10 +20,9 @@
 
 package org.soter.rbac.jacc;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-
+import java.util.Set;
 import javax.security.jacc.PolicyContextException;
 
 import org.soter.rbac.model.RbacType;
@@ -31,7 +30,7 @@ import org.soter.rbac.model.ScopeType;
 
 /**
  * Contains a sub-rbac model for a specific app, to be merged into a full rbac model
- * @version $Rev:$ $Date:$
+ * @version $Rev$ $Date$
  */
 public class AppRbac {
 
@@ -69,7 +68,7 @@ public class AppRbac {
     }
 
     public ScopeType getAppScope() throws PolicyContextException {
-        List<ScopeType> scopes = rbac.getScope();
+        Collection<ScopeType> scopes = rbac.getScope();
         ScopeType appScope = getScope(appId, scopes);
         if (appScope == null) {
             throw new PolicyContextException("No app scope: " + appId);
@@ -78,7 +77,7 @@ public class AppRbac {
     }
 
     RbacPolicyConfiguration newPolicyConfiguration(String contextID) throws PolicyContextException {
-        List<ScopeType> scopes = rbac.getScope();
+        Collection<ScopeType> scopes = rbac.getScope();
         ScopeType appScope = getScope(appId, scopes);
         if (appScope == null) {
             throw new PolicyContextException("No app scope: " + appId);
@@ -92,7 +91,7 @@ public class AppRbac {
         return new RbacPolicyConfiguration(appScope, contextScope, this);
     }
 
-    private ScopeType getScope(String appId, List<ScopeType> scopes) {
+    private ScopeType getScope(String appId, Collection<ScopeType> scopes) {
         for (ScopeType scope: scopes) {
             if (appId.equals(scope.getScopeName())) {
                 return scope;

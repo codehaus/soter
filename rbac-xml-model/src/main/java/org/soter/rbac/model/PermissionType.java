@@ -51,7 +51,7 @@ import org.apache.xbean.recipe.Option;
         "actions"
         })
 public class PermissionType
-        implements Serializable {
+        implements Serializable, Keyable<String> {
 
     private final static long serialVersionUID = 12343L;
     @XmlElement(name = "permission-id", required = true)
@@ -88,6 +88,10 @@ public class PermissionType
      */
     public String getPermissionId() {
         return permissionId;
+    }
+
+    public String getKey() {
+        return getPermissionId();
     }
 
     /**
@@ -169,7 +173,7 @@ public class PermissionType
         props.put("name", name);
         props.put("actions", actions);
         ObjectRecipe recipe = new ObjectRecipe(clazz, props);
-        recipe.allow(Option.NAMED_PARAMETERS);
+        recipe.setConstructorArgNames(new String[] {"name", "actions"});
         permission = (Permission) recipe.create(cl);
     }
 

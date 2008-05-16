@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
     "password"
 })
 public class UserType
-    implements Serializable
+    implements Serializable, Keyable<String>
 {
 
     private final static long serialVersionUID = 12343L;
@@ -60,6 +60,10 @@ public class UserType
      */
     public String getUserName() {
         return userName;
+    }
+
+    public String getKey() {
+        return getUserName();
     }
 
     /**

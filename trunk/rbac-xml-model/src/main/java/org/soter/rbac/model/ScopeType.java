@@ -9,12 +9,10 @@
 package org.soter.rbac.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -52,16 +50,16 @@ import javax.xml.bind.annotation.XmlType;
         "scope"
         })
 public class ScopeType
-        implements Serializable {
+        implements Serializable, Keyable<String> {
 
     private final static long serialVersionUID = 12343L;
     @XmlElement(name = "scope-name", required = true)
     protected String scopeName;
     @XmlElement(name = "classloader-name")
     protected String classloaderName;
-    protected List<RoleType> role;
-    protected List<PermissionType> permission;
-    protected List<ScopeType> scope;
+    private final KeyedCollection<String, RoleType> role = new KeyedCollection<String, RoleType>();
+    private final KeyedCollection<String, PermissionType> permission = new KeyedCollection<String, PermissionType>();
+    private final KeyedCollection<String, ScopeType> scope = new KeyedCollection<String, ScopeType>();
 
     @XmlTransient
     private final Map<String, PermissionType> permissions = new HashMap<String, PermissionType>();
@@ -80,9 +78,9 @@ public class ScopeType
         scopeName = original.scopeName;
         classloaderName = original.classloaderName;
         //TODO these are iffy.  They are no longer the same objects as in the maps.
-        role = original.role;
-        permission = original.permission;
-        scope = original.scope;
+        role.addAll(original.role);
+        permission.addAll(original.permission);
+        scope.addAll(original.scope);
 
         parentScope = parent;
 
@@ -112,6 +110,10 @@ public class ScopeType
      */
     public String getScopeName() {
         return scopeName;
+    }
+
+    public String getKey() {
+        return getScopeName();
     }
 
     /**
@@ -164,11 +166,8 @@ public class ScopeType
      * Objects of the following type(s) are allowed in the list
      * {@link RoleType }
      */
-    public List<RoleType> getRole() {
-        if (role == null) {
-            role = new ArrayList<RoleType>();
-        }
-        return this.role;
+    public Collection<RoleType> getRole() {
+        return role;
     }
 
     /**
@@ -191,11 +190,8 @@ public class ScopeType
      * Objects of the following type(s) are allowed in the list
      * {@link PermissionType }
      */
-    public List<PermissionType> getPermission() {
-        if (permission == null) {
-            permission = new ArrayList<PermissionType>();
-        }
-        return this.permission;
+    public Collection<PermissionType> getPermission() {
+        return permission;
     }
 
     /**
@@ -218,11 +214,8 @@ public class ScopeType
      * Objects of the following type(s) are allowed in the list
      * {@link ScopeType }
      */
-    public List<ScopeType> getScope() {
-        if (scope == null) {
-            scope = new ArrayList<ScopeType>();
-        }
-        return this.scope;
+    public Collection<ScopeType> getScope() {
+        return scope;
     }
 
     public Map<String, PermissionType> getPermissions() {
@@ -342,6 +335,40 @@ public class ScopeType
         for (RoleType role : bit.getRole()) {
             RoleType existingRole = roles.get(role.getRoleName());
             existingRole.merge(role, this);
+        }
+    }
+
+    public void mergeData(ScopeType bit) {
+        if (!getScopeName().equals(bit.getScopeName())) {
+            throw new IllegalArgumentException("Mismatched merge: this is named " + getScopeName() + ", trying to merge: " + bit.getScopeName());
+        }
+        if (classloaderName == null) {
+            classloaderName = bit.classloaderName;
+        }
+
+        for (RoleType role : bit.role) {
+            RoleType existingRole = this.role.toMap().get(role.getRoleName());
+            if (existingRole != null) {
+                existingRole.mergeModel(role);
+            } else {
+                this.role.add(role);
+            }
+        }
+
+        for (ScopeType scope : bit.scope) {
+            ScopeType existingScope = this.scope.toMap().get(scope.getScopeName());
+            if (existingScope != null) {
+                existingScope.mergeModel(scope);
+            } else {
+                this.scope.add(scope);
+            }
+        }
+
+        for (PermissionType permission: bit.permission) {
+            if (this.permission.toMap().containsKey(permission.getPermissionId())) {
+                throw new IllegalStateException("Permission already registered with id " + permission.getPermissionId());
+            }
+            this.permission.add(permission);
         }
     }
 

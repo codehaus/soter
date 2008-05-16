@@ -53,7 +53,7 @@ import javax.xml.bind.annotation.XmlTransient;
     "permissionId"
 })
 public class RoleType
-    implements Serializable
+    implements Serializable, Keyable<String>
 {
 
     private final static long serialVersionUID = 12343L;
@@ -94,6 +94,10 @@ public class RoleType
      */
     public String getRoleName() {
         return roleName;
+    }
+
+    public String getKey() {
+        return getRoleName();
     }
 
     /**
@@ -283,6 +287,19 @@ public class RoleType
 //        }
         startPermissions(scope, role.permissionId);
         startSubRoles(scope, role.subRole);
+    }
+
+    public void mergeData(RoleType bit) {
+        if (!getRoleName().equals(bit.getRoleName())) {
+            throw new IllegalArgumentException("Mismatched merge: this is named " + getRoleName() + ", trying to merge: " + bit.getRoleName());
+        }
+
+        if (bit.subRole != null) {
+            this.getSubRole().addAll(bit.subRole);
+        }
+        if (bit.permissionId != null) {
+            this.getPermissionId().addAll(bit.permissionId);
+        }
     }
 
     public boolean equals(Object o) {

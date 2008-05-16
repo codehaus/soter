@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.security.jacc.PolicyContext;
@@ -47,7 +48,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Configured bean that sets up the rbac policy
- * @version $Rev:$ $Date:$
+ * @version $Rev$ $Date$
  */
 public class RbacBean {
 
@@ -85,7 +86,7 @@ public class RbacBean {
 
     public void registerApp(AppRbac appRbac) throws PolicyContextException {
         ScopeType appScope = appRbac.getAppScope();
-        List<ScopeType> contexts = appScope.getScope();
+        Collection<ScopeType> contexts = appScope.getScope();
         for (ScopeType context: contexts) {
             contextToAppMap.put(context.getScopeName(), appRbac);
         }

@@ -23,6 +23,7 @@ package org.soter.rbac.model;
 import java.io.Writer;
 import java.io.Reader;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -39,7 +40,7 @@ import org.soter.rbac.model.RbacType;
 import org.soter.rbac.model.ObjectFactory;
 
 /**
- * @version $Rev:$ $Date:$
+ * @version $Rev$ $Date$
  */
 public class RbacXmlUtil {
     public static final XMLInputFactory XMLINPUT_FACTORY = XMLInputFactory.newInstance();
